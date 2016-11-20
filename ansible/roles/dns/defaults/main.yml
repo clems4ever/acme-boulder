@@ -1,0 +1,4 @@
+
+main_config_file: { src: named.conf.local.j2, dest: /etc/bind/named.conf.local }
+
+

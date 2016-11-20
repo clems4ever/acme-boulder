@@ -1,0 +1,6 @@
+// This file is managed by Ansible, please do not edit manually
+
+{% for d in domains %}
+include "/etc/bind/{{ d.domain }}.conf";
+{% endfor %}
+

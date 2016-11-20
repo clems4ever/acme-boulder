@@ -1,0 +1,24 @@
+- name: Git is installed
+  apt: name=git state=installed 
+
+- name: Boulder is checked out
+  git:
+    repo: https://github.com/letsencrypt/boulder.git
+    dest: "{{ repo_dir }}"
+    version: release-2016-07-14
+    update: no
+
+- name: Patched files are deployed
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: docker-compose.yml, dest: "{{ repo_dir }}/docker-compose.yml" }
+    - { src: test/config/wfe.json, dest: "{{ repo_dir }}/test/config/wfe.json" }
+    - { src: test/config/va.json, dest: "{{ repo_dir }}/test/config/va.json" }
+
+- name: Boulder is started
+  docker_service:
+    project_src: ~/boulder
+    state: present
+  register: output

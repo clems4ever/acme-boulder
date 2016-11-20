@@ -1,0 +1,7 @@
+// This file is managed by Ansible, please do not edit
+
+zone "{{ item.domain }}" {
+    type master;
+    file "/etc/bind/db.{{ item.domain }}";
+};
+

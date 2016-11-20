@@ -1,0 +1,60 @@
+- name: Prerequisites packages are installed
+  apt: name={{ item }} state=installed
+  with_items:
+    - apt-transport-https 
+    - ca-certificates
+    - python-setuptools # for easy_install
+
+- name: Debian add Docker repository and update apt cache
+  apt_repository:
+    repo: deb https://apt.dockerproject.org/repo debian-{{ debian_version }} main
+    update_cache: yes
+    state: present
+  tags: [docker]
+
+- name: Debian Docker is present
+  apt:
+    name: docker-engine
+    state: latest
+    force: yes
+  tags: [docker]
+
+- name: pip is up to date
+  easy_install: name=pip state=latest
+
+- name: Debian docker-py is present
+  pip:
+    name: docker-py
+    version: 1.8.1
+    state: present
+  tags: [docker]
+
+- name: Debian files are present
+  template:
+    src: "{{ docker_cfg }}"
+    dest: "{{ docker_cfg_dest }}"
+  register: copy_result
+  tags: [docker]
+
+- name: Debian Daemon is reloaded
+  command: systemctl daemon-reload
+  when: copy_result|changed and is_systemd is defined
+  tags: [docker]
+
+- name: docker group is added to users
+  user:
+    name: "{{ item }}"
+    groups: docker
+    append: yes
+  with_items: 
+    - "{{ users }}"
+  register: user_result
+  tags: [docker]
+
+- name: Debian Docker service is restarted
+  service:
+    name: docker
+    state: restarted
+  when: copy_result|changed or user_result|changed
+  tags: [docker]
+

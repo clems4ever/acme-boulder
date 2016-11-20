@@ -1,0 +1,41 @@
+- name: Bind9 is installed
+  apt: name={{ item }} state=installed
+  with_items:
+    - bind9
+
+- name: Main config file is up to date
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+    owner: root
+    group: bind
+  notify: reload bind9
+  with_items:
+    - "{{ main_config_file }}"
+
+- name: Domains config are up to date
+  template:
+    src: domain.conf.j2
+    dest: "/etc/bind/{{ item.domain }}.conf"
+    mode: 0644
+  notify: reload bind9
+  with_items:
+    - "{{ domains }}"
+
+- name: Database file are up to date
+  template:
+    src: db.domain.j2
+    dest: "/etc/bind/db.{{ item.domain }}"
+    mode: 0644
+    force: no
+  notify: reload bind9
+  with_items:
+    - "{{ domains }}"
+
+- name: Bind9 service is enabled
+  service: name=bind9 enabled=true
+
+- name: Resolv.conf is up to date
+  copy: src=resolv.conf dest=/etc/resolv.conf mode=0644
+

@@ -1,0 +1,5 @@
+issuer  ansible_host=192.168.5.100
+boulder ansible_host=192.168.5.200
+
+[boulder_hosts]
+boulder

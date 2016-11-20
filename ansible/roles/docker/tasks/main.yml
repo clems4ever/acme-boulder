@@ -1,0 +1,6 @@
+
+- include: docker.yml
+
+- include: docker-compose.yml
+
+# - include: docker-ui.yml
