@@ -13,6 +13,6 @@
     - boulder
 
 - name: "Certbot is installed on every machine"
-  hosts: issuers
+  hosts: all
   roles:
     - certbot
