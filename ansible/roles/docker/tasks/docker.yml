@@ -20,7 +20,10 @@
   tags: [docker]
 
 - name: pip is up to date
-  easy_install: name=pip state=latest
+  easy_install:
+    name: pip 
+    state: latest
+  tags: [docker]
 
 - name: Debian docker-py is present
   pip:
