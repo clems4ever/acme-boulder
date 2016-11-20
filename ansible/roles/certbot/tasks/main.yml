@@ -2,11 +2,11 @@
   apt_repository: 
     repo: 'deb http://ftp.debian.org/debian jessie-backports main' 
     state: present
+    update_cache: yes
 
 - name: Certbot is present
   apt: 
     name: certbot
     state: installed
-    update_cache: yes
     default_release: jessie-backports
 
