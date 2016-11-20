@@ -10,10 +10,3 @@
     update_cache: yes
     default_release: jessie-backports
 
-- name: Test certbot script is present
-  copy:
-    src: certbot_test
-    dest: /usr/bin/certbot_test
-    mode: 0755
-    owner: root
-    group: root
