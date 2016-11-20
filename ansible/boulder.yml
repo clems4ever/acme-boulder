@@ -1,13 +1,18 @@
 - name: "Boulder is started"
-  hosts: boulder_hosts
+  hosts: boulders
   vars:
     domains:
-      - domain: open-intent.io 
+      - domain: example.com 
         entries:
-          - mytest      IN    A   192.168.5.100
-          - test        IN    A   192.168.5.100
-          - othertest   IN    A   192.168.5.100
+          - test        IN    A   192.168.2.100
+          - mytest      IN    A   192.168.2.100
+          - othertest   IN    A   192.168.2.100
   roles:
     - dns
     - docker
     - boulder
+
+- name: "Certbot is installed on every machine"
+  hosts: issuers
+  roles:
+    - certbot
