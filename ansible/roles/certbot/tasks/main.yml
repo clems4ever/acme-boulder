@@ -1,0 +1,19 @@
+- name: Certbot repository is present
+  apt_repository: 
+    repo: 'deb http://ftp.debian.org/debian jessie-backports main' 
+    state: present
+
+- name: Certbot is present
+  apt: 
+    name: certbot
+    state: installed
+    update_cache: yes
+    default_release: jessie-backports
+
+- name: Test certbot script is present
+  copy:
+    src: certbot_test
+    dest: /usr/bin/certbot_test
+    mode: 0755
+    owner: root
+    group: root
